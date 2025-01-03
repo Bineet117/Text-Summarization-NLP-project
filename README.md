@@ -74,10 +74,8 @@ Renewable energy is a critical solution to the growing global demand for clean, 
 
 ## 📸 Screenshots  
 
-### 🏠 Home Page  
-![Home Page](path/to/homepage_screenshot.png)  
 
-### 📄 Summary Output  
+### 📄 Summarization app   
 ![Summary Output](https://github.com/user-attachments/assets/35995e48-3abb-41d2-aa46-0996f4112aec)
 
 
