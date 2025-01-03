@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization App</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2C3E50;  /* Dark background */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header Style */
+        .header {
+            text-align: center;
+            background-color: #34495E;
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* User Input Section */
+        .section {
+            width: 48%; /* Each section takes up half the width */
+            background-color: #16A085; /* Dark greenish gradient */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        /* Textarea Styling */
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            resize: none;
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
+            color: #fff;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea:focus {
+            border: 2px solid #1ABC9C;
+            outline: none;
+        }
+
+        /* Output Area */
+        #output {
+            width: 100%;
+            height: 300px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+            display: none; /* Initially hidden */
+            overflow-y: auto;
+        }
+
+        /* Button Styling */
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #1ABC9C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #16A085;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        .loading span {
+            animation: spin 1.5s infinite linear;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            .section {
+                width: 100%; /* Full width on small screens */
+            }
+
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Text Summarization App</h1>
+    </div>
+
+    <div class="container">
+        <!-- User Input Section -->
+        <div class="section">
+            <h2>User Input</h2>
+            <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+            <button onclick="summarizeText()">Summarize</button>
+            <!-- Loading Spinner -->
+            <div id="loading" class="loading">
+                <span>⏳ Summarizing...</span>
+            </div>
+        </div>
+
+        <!-- Summarized Text Section -->
+        <div class="section">
+            <h2>Summarized Text</h2>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        async function summarizeText() {
+            const inputText = document.getElementById("inputText").value;
+            const outputDiv = document.getElementById("output");
+            const loadingDiv = document.getElementById("loading");
+
+            if (inputText.trim() === "") {
+                alert("Please enter some text to summarize.");
+                return;
+            }
+
+            // Show the loading spinner
+            loadingDiv.style.display = 'block';
+            outputDiv.style.display = 'none'; // Hide output section initially
+
+            try {
+                // Send the input text to the Flask backend for summarization
+                const response = await fetch('/summarize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: inputText }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Something went wrong!');
+                    return;
+                }
+
+                const data = await response.json();
+                outputDiv.innerText = data.summary;  // Display the summarized text
+                outputDiv.style.display = 'block'; // Show the output section
+                loadingDiv.style.display = 'none'; // Hide loading spinner
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to summarize text.');
+                loadingDiv.style.display = 'none'; // Hide loading spinner
+            }
+        }
+    </script>
+</body>
+</html>
