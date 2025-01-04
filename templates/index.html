@@ -208,14 +208,58 @@
 
             if (file) {
                 const reader = new FileReader();
+
                 reader.onload = function (e) {
-                    document.getElementById("inputText").value = e.target.result;
+                    const fileContent = e.target.result;
+
+                    if (file.type === "application/pdf") {
+                        // Extract text from PDF
+                        extractTextFromPDF(fileContent);
+                    } else {
+                        // Handle other text file formats (like .txt)
+                        document.getElementById("inputText").value = fileContent;
+                    }
                 };
-                reader.readAsText(file);
+
+                reader.readAsArrayBuffer(file);
             } else {
                 alert("No file selected!");
             }
         }
+
+        function extractTextFromPDF(pdfData) {
+            const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+            loadingTask.promise.then(function (pdf) {
+                let textContent = "";
+                const numPages = pdf.numPages;
+
+                // Loop through all the pages and extract text
+                const extractPageText = (pageNum) => {
+                    pdf.getPage(pageNum).then(function (page) {
+                        page.getTextContent().then(function (text) {
+                            text.items.forEach(function (item) {
+                                textContent += item.str + " ";
+                            });
+
+                            // If there are more pages, process the next one
+                            if (pageNum < numPages) {
+                                extractPageText(pageNum + 1);
+                            } else {
+                                // Once all pages are processed, insert the text into the textarea
+                                document.getElementById("inputText").value = textContent;
+                            }
+                        });
+                    });
+                };
+
+                // Start extracting text from the first page
+                extractPageText(1);
+            }).catch(function (error) {
+                console.error("Error loading PDF:", error);
+                alert("Error extracting text from PDF.");
+            });
+        }
+
 
         async function summarizeText() {
             const inputText = document.getElementById("inputText").value;
@@ -304,5 +348,6 @@
 
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </body>
 </html>
