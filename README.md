@@ -9,8 +9,11 @@ The **Text Summarization Project** simplifies and condenses large pieces of text
 - **Summarization Methods**:  
   - 🖍️ **Extractive Summarization**: Identifies and extracts key sentences from the text.  
   - ✨ **Abstractive Summarization**: Generates human-like summaries in natural language.  
-- 🌐 **Interactive Flask Web App**: Upload text files or input text directly via an intuitive interface.  
+- 🌐 **Interactive Flask Web App**:  
+  - Upload text files or PDFs for summarization.  
+  - Input text directly via an intuitive interface.  
 - ⚙️ **Customizable Parameters**: Adjust summary length and style.  
+- 📥 **Download Options**: Save the summarized text as a PDF, text file, or copy it directly.  
 - 📈 **Scalable**: Handles texts of various lengths and complexities.  
 
 ---
@@ -21,7 +24,6 @@ The **Text Summarization Project** simplifies and condenses large pieces of text
 - **Libraries and Tools**:  
   - 🤗 `transformers` (Hugging Face) for pre-trained summarization models like T5 or BART.  
   - 🧠 `spaCy` or `NLTK` for text preprocessing.  
-  - 🖼️ `Flask-Bootstrap` for responsive web UI (optional).  
 
 ---
 
@@ -54,10 +56,11 @@ The **Text Summarization Project** simplifies and condenses large pieces of text
 
 ## 🔧 Usage  
 
-1. Launch the web app and input your text or upload a file.  
+1. Launch the web app and input your text, upload a `.txt` or `.pdf` file.  
 2. Select the summarization method (extractive or abstractive).  
 3. Adjust the parameters, such as summary length.  
-4. View or download the summarized text.  
+4. View the summarized text.  
+5. Download the summarized text as a PDF or `.txt` file, or copy it directly.  
 
 ---
 
@@ -74,18 +77,13 @@ Renewable energy is a critical solution to the growing global demand for clean, 
 
 ## 📸 Screenshots  
 
+### 📄 Summarization app  
+![Summary Output](https://github.com/user-attachments/assets/eb2c4148-8ace-4c87-8277-6bd709de091d)  
 
-### 📄 Summarization app   
-![Summary Output](https://github.com/user-attachments/assets/35995e48-3abb-41d2-aa46-0996f4112aec)
-
-
-
-
+---
 
 ## 🚀 Future Improvements  
 - **Model Enhancement**: Fine-tune pre-trained models for domain-specific text summarization.  
 - 🌍 **Multi-Language Support**: Add summarization for non-English languages.  
 - 📡 **Live Data**: Enable summarization for real-time sources such as news feeds or web scraping.  
 - 📱 **Mobile App**: Extend the project to mobile platforms for on-the-go usage.  
-
-
